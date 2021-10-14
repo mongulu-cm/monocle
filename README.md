@@ -1,19 +1,36 @@
-         ___        ______     ____ _                 _  ___  
-        / \ \      / / ___|   / ___| | ___  _   _  __| |/ _ \ 
-       / _ \ \ /\ / /\___ \  | |   | |/ _ \| | | |/ _` | (_) |
-      / ___ \ V  V /  ___) | | |___| | (_) | |_| | (_| |\__, |
-     /_/   \_\_/\_/  |____/   \____|_|\___/ \__,_|\__,_|  /_/ 
- ----------------------------------------------------------------- 
 
+# How to use moncole to monitor mongulu-cm repository
 
-Hi there! Welcome to AWS Cloud9!
+0. Create your GITHUB_TOKEN and put it where mentioned in the doc
 
-To get started, create some files, play with the terminal,
-or visit https://docs.aws.amazon.com/console/cloud9/ for our documentation.
+1. Clone the repository
+```bash
+git checkout tags/1.1.0 -b v1.1.0 
+```
 
-Happy coding!
-# monocle
+2. Fill the config.yaml with:
+``` yaml
+---
+workspaces:
+  - name: mongulu
+    crawlers:
+      - name: github-mongulu
+        provider:
+          github_organization: mongulu-cm
+        update_since: '2020-08-20'
+```
 
-install Docker compose cmd
-sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
+3. Start monocle
+```bash
+export MONOCLE_VERSION=1.1.0   
+docker compose up 
+```
+
+# How to do a clean fresh crawler ( nothing leaves in Elasticsearch)
+
+```bash
+docker compose stop && docker compose rm  
+rm -rf data/nodes
+export MONOCLE_VERSION=1.1.0
+docker compose up
+```
